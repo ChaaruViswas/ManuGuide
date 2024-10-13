@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Quality Check - ManuGuide{% endblock %}
+
+{% block content %}
+<div class="bg-[#DBAFA0] p-4">
+    <h1 class="text-3xl font-bold mb-6 text-[#49243E]">ManuGuide Dashboard</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="bg-white p-4 rounded shadow">
+            <div id="cookie-image-prediction" class="flex flex-col items-center">
+                <img id="cookie-image" class="w-48 h-48 object-cover mb-2" src="" alt="Cookie Image">
+                <p id="cookie-prediction" class="text-lg font-semibold text-[#49243E]"></p>
+            </div>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <div id="cookie-graph"></div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white p-4 rounded shadow">
+            <div id="temperature-graph"></div>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <div id="humidity-graph"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+function updateGraphs() {
+    fetch('/get_quality_data')
+        .then(response => response.json())
+        .then(data => {
+            // Update temperature graph
+            Plotly.newPlot('temperature-graph', data.temperature.data, data.temperature.layout);
+
+            // Update humidity graph
+            Plotly.newPlot('humidity-graph', data.humidity.data, data.humidity.layout);
+
+            // Update cookie classification graph
+            Plotly.newPlot('cookie-graph', data.cookie_classification.data, data.cookie_classification.layout);
+
+            // Update cookie image and prediction
+            document.getElementById('cookie-image').src = data.image_url || '/static/placeholder-cookie.png';
+            document.getElementById('cookie-prediction').textContent = `Predicted Cookie State: ${data.predicted_class}`;
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Update graphs every 5 seconds
+setInterval(updateGraphs, 5000);
+
+// Initial update
+updateGraphs();
+</script>
+{% endblock %}

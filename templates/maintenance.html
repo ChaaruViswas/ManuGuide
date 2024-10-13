@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Maintenance Schedule - ManuGuide{% endblock %}
+
+{% block content %}
+<h1>Maintenance Schedule for {{ year }}</h1>
+
+<div class="calendar-container">
+    {% for month in range(1, 13) %}
+    <div class="month">
+        <h2>{{ month | month_name }}</h2>
+        <table class="calendar">
+            <tr>
+                <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+            </tr>
+            {% for week in month | month_calendar(year) %}
+            <tr>
+                {% for day in week %}
+                    {% if day != 0 %}
+                        <td class="
+                            {% for equip, days in maintenance_days[month].items() %}
+                                {% if day in days %}maintenance-{{ equip.lower().replace(' ', '-') }}{% endif %}
+                            {% endfor %}
+                        ">
+                            {{ day }}
+                            <div class="maintenance-info">
+                                {% for equip, days in maintenance_days[month].items() %}
+                                    {% if day in days %}
+                                        <p>{{ equip }}</p>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="legend">
+    <h3>Equipment Legend</h3>
+    <ul>
+        <li class="maintenance-mixer">Mixer</li>
+        <li class="maintenance-oven">Oven</li>
+        <li class="maintenance-packaging-machine">Packaging Machine</li>
+        <li class="maintenance-cooling-conveyor">Cooling Conveyor</li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .calendar-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+    .month {
+        width: 250px;
+        margin: 10px;
+    }
+    .calendar {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .calendar th, .calendar td {
+        border: 1px solid #ddd;
+        padding: 5px;
+        text-align: center;
+        position: relative;
+    }
+    .calendar th {
+        background-color: #f2f2f2;
+    }
+    .maintenance-mixer { background-color: #ffcccc; }
+    .maintenance-oven { background-color: #ccffcc; }
+    .maintenance-packaging-machine { background-color: #ccccff; }
+    .maintenance-cooling-conveyor { background-color: #ffffcc; }
+    
+    .maintenance-info {
+        display: none;
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ddd;
+        padding: 5px;
+        z-index: 1;
+    }
+    td:hover .maintenance-info {
+        display: block;
+    }
+    .legend {
+        margin-top: 20px;
+    }
+    .legend ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    .legend li {
+        display: inline-block;
+        margin-right: 10px;
+        padding: 5px;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Home - ManuGuide{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 class="text-3xl font-bold mb-6">Welcome to ManuGuide</h1>
+    <p class="mb-4">Select a tab above to view specific data or choose from the quick links below:</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="{{ url_for('temperature') }}" class="btn text-center">Temperature</a>
+        <a href="{{ url_for('humidity') }}" class="btn text-center">Humidity</a>
+        <a href="{{ url_for('weight') }}" class="btn text-center">Weight</a>
+        <a href="{{ url_for('work_orders') }}" class="btn text-center">Work Orders</a>
+        <a href="{{ url_for('inventory') }}" class="btn text-center">Inventory</a>
+        <a href="{{ url_for('quality_check') }}" class="btn text-center">Quality Check</a>
+    </div>
+</div>
+{% endblock %}

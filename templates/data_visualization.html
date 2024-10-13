@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Data Visualization - ManuGuide{% endblock %}
+
+{% block content %}
+<h1>Data Visualization</h1>
+
+<div class="chart-container">
+    <div id="temperatureHumidityChart"></div>
+</div>
+
+<div class="chart-container">
+    <div id="cookieWeightChart"></div>
+</div>
+
+<div class="chart-row">
+    <div class="chart-container-small">
+        <div id="workordersChart"></div>
+    </div>
+    <div class="chart-container-small">
+        <div id="inventoryChart"></div>
+    </div>
+    <div class="chart-container-small">
+        <div id="qualityCheckChart"></div>
+    </div>
+</div>
+
+<div class="status-container">
+    <h3>System Status</h3>
+    <div class="status-row">
+        <div class="status-column">
+            <p class="status-item">System: <span id="systemStatus">OK</span></p>
+            <p class="status-item">Sensors: <span id="sensorStatus">Active</span></p>
+            <p class="status-item">Connection: <span id="connectionStatus">Stable</span></p>
+        </div>
+        <div class="status-column">
+            <p class="status-item">Production Rate: <span id="productionRate">95%</span></p>
+            <p class="status-item">Maintenance Due: <span id="maintenanceDue">3 days</span></p>
+            <p class="status-item">Alerts: <span id="alertStatus">None</span></p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function fetchData() {
+        fetch('/api/chart_data')
+            .then(response => response.json())
+            .then(data => {
+                updateCharts(data);
+            });
+    }
+
+    function updateCharts(data) {
+        // Temperature and Humidity Chart
+        var tempHumidTrace1 = {
+            x: data.labels,
+            y: data.temperature,
+            name: 'Temperature',
+            type: 'scatter'
+        };
+        var tempHumidTrace2 = {
+            x: data.labels,
+            y: data.humidity,
+            name: 'Humidity',
+            yaxis: 'y2',
+            type: 'scatter'
+        };
+        var tempHumidLayout = {
+            title: 'Temperature and Humidity Over Time',
+            yaxis: {title: 'Temperature (°C)'},
+            yaxis2: {
+                title: 'Humidity (%)',
+                overlaying: 'y',
+                side: 'right'
+            }
+        };
+        Plotly.newPlot('temperatureHumidityChart', [tempHumidTrace1, tempHumidTrace2], tempHumidLayout);
+
+        // Cookie Weight Chart
+        var cookieWeightTrace = {
+            y: data.cookie_weight,
+            type: 'box',
+            name: 'Cookie Weight'
+        };
+        var cookieWeightLayout = {
+            title: 'Cookie (Biscuit) Weight Distribution'
+        };
+        Plotly.newPlot('cookieWeightChart', [cookieWeightTrace], cookieWeightLayout);
+
+        // Work Orders Chart
+        var workOrdersTrace = {
+            x: data.labels,
+            y: data.workorders,
+            type: 'bar',
+            name: 'Work Orders'
+        };
+        var workOrdersLayout = {
+            title: 'Work Orders Over Time'
+        };
+        Plotly.newPlot('workordersChart', [workOrdersTrace], workOrdersLayout);
+
+        // Inventory Chart
+        var inventoryTrace = {
+            x: data.labels,
+            y: data.inventory,
+            type: 'scatter',
+            name: 'Inventory'
+        };
+        var inventoryLayout = {
+            title: 'Inventory Management'
+        };
+        Plotly.newPlot('inventoryChart', [inventoryTrace], inventoryLayout);
+
+        // Quality Check Chart
+        var qualityCheckData = [{
+            values: data.quality_check_values,
+            labels: data.quality_check_labels,
+            type: 'pie',
+            name: 'Quality Check'
+        }];
+        var qualityCheckLayout = {
+            title: 'Quality Check Results'
+        };
+        Plotly.newPlot('qualityCheckChart', qualityCheckData, qualityCheckLayout);
+
+        // Update system status
+        document.getElementById('systemStatus').textContent = data.system_status;
+        document.getElementById('sensorStatus').textContent = data.sensor_status;
+        document.getElementById('connectionStatus').textContent = data.connection_status;
+        document.getElementById('productionRate').textContent = data.production_rate;
+        document.getElementById('maintenanceDue').textContent = data.maintenance_due;
+        document.getElementById('alertStatus').textContent = data.alert_status;
+    }
+
+    fetchData();
+    setInterval(fetchData, 5000);  // Update every 5 seconds
+});
+</script>
+
+<style>
+.chart-container {
+    width: 100%;
+    height: 400px;
+    margin-bottom: 20px;
+}
+.chart-row {
+    display: flex;
+    justify-content: space-between;
+}
+.chart-container-small {
+    width: 32%;
+    height: 300px;
+}
+.status-container {
+    background-color: #f0f0f0;
+    padding: 20px;
+    margin: 20px 0;
+}
+.status-row {
+    display: flex;
+    justify-content: space-around;
+}
+.status-column {
+    width: 48%;
+}
+.status-item {
+    margin: 10px 0;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Humidity - ManuGuide{% endblock %}
+
+{% block content %}
+<h1>Humidity Data</h1>
+<p>Current Humidity: {{ data.current }}%</p>
+<p>Minimum Humidity: {{ data.min }}%</p>
+<p>Maximum Humidity: {{ data.max }}%</p>
+{% endblock %}

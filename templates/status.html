@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Status - ManuGuide{% endblock %}
+
+{% block content %}
+<h1>System Status</h1>
+<p>System: {{ data.system }}</p>
+<p>Sensors: {{ data.sensors }}</p>
+<p>Connection: {{ data.connection }}</p>
+{% endblock %}

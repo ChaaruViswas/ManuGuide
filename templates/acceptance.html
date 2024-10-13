@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Acceptance - ManuGuide{% endblock %}
+
+{% block content %}
+<h1>Acceptance Data</h1>
+<p>Total: {{ data.total }}</p>
+<p>Accepted: {{ data.accepted }}</p>
+<p>Rejected: {{ data.rejected }}</p>
+{% endblock %}

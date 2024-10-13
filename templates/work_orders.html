@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Work Orders - ManuGuide{% endblock %}
+
+{% block content %}
+<h1>Work Orders</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.product }}</td>
+            <td>{{ order.quantity }}</td>
+            <td>{{ order.status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Weight - AWS Dashboard{% endblock %}
+
+{% block content %}
+<h1>Cookie Weight Data</h1>
+<p>Current Weight: {{ data.current }} grams</p>
+<p>Minimum Weight: {{ data.min }} grams</p>
+<p>Maximum Weight: {{ data.max }} grams</p>
+{% endblock %}

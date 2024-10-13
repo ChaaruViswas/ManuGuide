@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Temperature - AWS ManuGuide{% endblock %}
+
+{% block content %}
+<h1>Temperature Data</h1>
+<p>Current Temperature: {{ data.current }}°C</p>
+<p>Minimum Temperature: {{ data.min }}°C</p>
+<p>Maximum Temperature: {{ data.max }}°C</p>
+{% endblock %}
